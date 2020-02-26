@@ -20,4 +20,4 @@ Espero pode ajudar as pessoas que estão aprendendo e poder mostrar meu conhecim
 Quem quiser, pode baixar os fontes, fazer alterações e utilizar de forma pública e gratuita, só peço que façam as devidas referências a este humilde autor/programador.
 Um forte abraço 
 
-E que a FORÇA estejam com vocês!
+E que a FORÇA esteja com vocês!

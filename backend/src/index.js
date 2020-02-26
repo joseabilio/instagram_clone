@@ -7,13 +7,11 @@ const config = require('./config/config');
 
 
 const app = express();
-//Substituir o trecho config.moogoStringConnection por sua string de conexao com o seu servidor mongoDb
+
+//Substituir o trecho config.moogoStringConnection por sua string de conexão com o seu servidor mongoDb
 mongoose.connect(config.moogoStringConnection, 
                  {useNewUrlParser:true, useUnifiedTopology:true}         
                 );
 
 app.use(require('./routes'));
-
-
-
 app.listen(3333);
