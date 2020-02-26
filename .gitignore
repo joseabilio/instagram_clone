@@ -1,3 +1,4 @@
 backend/src/config/config.js
 backend/node_modules/*
+backend/uploads/resized
 backend/uploads/*
