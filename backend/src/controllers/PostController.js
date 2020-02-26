@@ -1,11 +1,13 @@
 const User = require('../models/Post');
 const Post = require('../models/Post');
+const {GetHashTag} = require('./HashTagController');
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 
 
 const createPost = (req, res)=>{
+    const {author, place, description, hashtags} = req.body;
     
     return res.json({ok:true});
 }
