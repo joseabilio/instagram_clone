@@ -22,7 +22,7 @@ const createPost = (req, res)=>{
         const listHashTag = hashtags.indexOf(' ') !== -1 ? 
                             hashtags.split(' ') : hashtags.indexOf(',') !== -1 ? 
                             hashtags.split(',') : hashtags.indexOf(';') !== -1 ? 
-                            listHashTag = hashtags.split(';') : hashtags;
+                            hashtags.split(';') : hashtags;
     }
 
 
