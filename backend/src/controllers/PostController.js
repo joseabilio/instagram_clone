@@ -19,21 +19,12 @@ const createPost = (req, res)=>{
         fs.unlinkSync(req.file.path);
     
     if(hashtags){
-        const itemFind = hashtags.indexOf(' ') !== -1 ? 0 :hashtags.indexOf(',') !== -1 ? 1 : hashtags.indexOf(';') !== -1 ? 2 : 3;
-        switch (itemFind){
-            case 0 : 
-                const listHashTag = hashtags.split(' ');
-                break;
-            case 1 : 
-                const listHashTag = hashtags.split(',');
-                break;
-            case 2 : 
-                const listHashTag = hashtags.split(';');
-                break;
-        }
-     
+        const listHashTag = hashtags.indexOf(' ') !== -1 ? 
+                            hashtags.split(' ') : hashtags.indexOf(',') !== -1 ? 
+                            hashtags.split(',') : hashtags.indexOf(';') !== -1 ? 
+                            listHashTag = hashtags.split(';') : hashtags;
     }
-    
+
 
 
     
