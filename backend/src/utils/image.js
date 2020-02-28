@@ -2,8 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 
-const resizeImage = async (filePath)=>{
-    
+const resizeImage = async filePath=>{
     const dirName = path.dirname(filePath);
     const fileName = path.basename(filePath);
     await sharp(filePath)
@@ -14,7 +13,7 @@ const resizeImage = async (filePath)=>{
     );
     fs.unlinkSync(filePath);
 
-    return fileName;
+    
 }
 
-module.exports = {resizeImage};
+module.exports = resizeImage;

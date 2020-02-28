@@ -2,13 +2,14 @@ const resizeImage = require('../utils/image');
 const HashTag = require('../models/Hashtag');
 const Post = require('../models/Post');
 const User = require('../models/User');
+const Comment = require('../models/Comment');
 
 
 const createPost = async (req, res)=>{
     const {author, place, description, hashtags} = req.body;
     const {filename:image} = req.file;
     
-    await resizeImage(req.file.path);
+    resizeImage(req.file.path);
    
     const post = await Post.create({
         author,
@@ -25,8 +26,6 @@ const createPost = async (req, res)=>{
             var auxObj = await HashTag.findOne({hashTag});
             
             if(!auxObj) auxObj = await HashTag.create({hashTag});
-
-            auxObj.posts.push(post);
 
             await auxObj.save();
                       
@@ -66,4 +65,22 @@ const getPostsByHashTag = async (req, res) =>{
 
 }
 
-module.exports = {createPost, index, userPost, getPostsByHashTag};
+const criarComentario = async (req, res)=>{
+    var {userId, text} = req.body;
+    var {postId} = req.params;
+
+    const post = await Post.findById(postId);
+    author = await User.findById(userId);
+
+
+    const newComment = await Comment.create({
+        post,
+        author,
+        text 
+    });
+    
+    return res.json(newComment);
+}
+
+
+module.exports = {createPost, index, userPost, getPostsByHashTag, criarComentario};

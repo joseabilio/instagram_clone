@@ -3,6 +3,7 @@ const sendEmail = require('../utils/email');
 const resizeImage = require('../utils/image');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
+const path = require('path');
 
 
 const createUser = async (req, res)=>{
@@ -17,7 +18,7 @@ const createUser = async (req, res)=>{
     }
     else{
 
-        await resizeImage(req.file.path);
+        resizeImage(req.file.path);
         
         password = await bcrypt.hash(password, 5);
         const newUser = await User.create({
@@ -72,29 +73,28 @@ const perfilUser = async (req, res)=>{
 }
 
 const editUser = async (req, res)=>{
-    var {bio, oldPassword, newPassword} = req.body;
-    const {filename:perfilImage} = req.file;
+    var {bio, newPassword} = req.body;
+    var newImage;
+    if (req.file) newImage = req.file.filename;
     const {user} = req.params;
 
     var userAux = await User.findOne({user});
     
-    if(!bcrypt.compare(userAux.password, oldPassword)){
-        fs.unlinkSync(req.file.path);
-        return res.status(400).send({error:'The old password is not valid!'});
-    }
-    else
-    {
-        userAux.bio = bio;
+    
+    userAux.bio = bio;
+    if (newPassword) {
         userAux.password = await bcrypt.hash(newPassword, 5);
-        if(perfilImage){
-            await resizeImage(req.file.path);
-
-            userAux.perfilImage = perfilImage
-        }
-        await user.save();
-
-        return res.json(userAux);
     }
+    if(newImage){
+        resizeImage(req.file.path);
+        //excluindo a imagem de perfil anterior
+        fs.unlinkSync(path.resolve(req.file.destination, 'resized', userAux.perfilImage));
+        userAux.perfilImage = newImage;
+    }
+    await userAux.save();
+
+    return res.json(userAux);
+    
 }
 
 module.exports = {createUser, confirmEmail, perfilUser, editUser};
