@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const sendEmail = require('../common/email');
+const sendEmail = require('../utils/email');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');

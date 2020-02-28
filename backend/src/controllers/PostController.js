@@ -3,6 +3,7 @@ const fs = require('fs');
 const sharp = require('sharp');
 const HashTag = require('../models/Hashtag');
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 
 const createPost = async (req, res)=>{
@@ -26,11 +27,8 @@ const createPost = async (req, res)=>{
 
     if(hashtags){
 
-        const listHashTag = hashtags.indexOf(' ') !== -1 ? 
-                            hashtags.split(' ') : hashtags.indexOf(',') !== -1 ? 
-                            hashtags.split(',') : hashtags.indexOf(';') !== -1 ? 
-                            hashtags.split(';') : hashtags;
-
+        const listHashTag = hashtags.replace(',', ' ').replace(';', ' ').replace('  ', ' ').split(' ');
+        
         await Promise.all(listHashTag.map(async hashTag => {
             var auxObj = await HashTag.findOne({hashTag});
             
@@ -46,8 +44,8 @@ const createPost = async (req, res)=>{
 
         await post.save();
     } 
-
-    return res.json(post);
+    const postReturn = await Post.findById(post._id).populate('hashtags', 'hashTag');
+    return res.json(postReturn);
 }
 
 const index = async (req, res)=>{
@@ -60,10 +58,20 @@ const index = async (req, res)=>{
 }
 
 const userPost = async (req, res)=>{
-    const posts = await Post.find({author : req.body.userId})
-                            .populate('hashtags', 'hashTag') //preenche apenas o id e o campo hastag da referencia da outra coleção, não trazendo assim os posts vinculados a hashtag    
+    const authorFilter = await User.findOne({user:req.params.user});
+    const posts = await Post.find({author:authorFilter})
+                            .populate('hashtags', 'hashTag')
                             .sort('-createdAt'); 
     return res.json(posts);
 }
 
-module.exports = {createPost, index, userPost};
+const getPostsByHashTag = async (req, res) =>{
+    const hastTagFilter = await HashTag.findOne({hashTag:`#${req.params.hashtag}`});
+    const posts = await Post.find({hashtags : hastTagFilter})
+    .populate('hashtags', 'hashTag') //preenche apenas o id e o campo hastag da referencia da outra coleção, não trazendo assim os posts vinculados a hashtag    
+    .sort('-likes'); 
+    return res.json(posts);
+
+}
+
+module.exports = {createPost, index, userPost, getPostsByHashTag};
