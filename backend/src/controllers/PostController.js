@@ -1,6 +1,4 @@
-const path = require('path');
-const fs = require('fs');
-const sharp = require('sharp');
+const resizeImage = require('../utils/image');
 const HashTag = require('../models/Hashtag');
 const Post = require('../models/Post');
 const User = require('../models/User');
@@ -10,13 +8,7 @@ const createPost = async (req, res)=>{
     const {author, place, description, hashtags} = req.body;
     const {filename:image} = req.file;
     
-    await sharp(req.file.path)
-            .resize(500)
-            .jpeg({quality:70})
-            .toFile(
-                path.resolve(req.file.destination, 'resized', image)
-            );
-        fs.unlinkSync(req.file.path);
+    await resizeImage(req.file.path);
    
     const post = await Post.create({
         author,
@@ -44,8 +36,8 @@ const createPost = async (req, res)=>{
 
         await post.save();
     } 
-    const postReturn = await Post.findById(post._id).populate('hashtags', 'hashTag');
-    return res.json(postReturn);
+    
+    return res.json(post);
 }
 
 const index = async (req, res)=>{
@@ -68,7 +60,7 @@ const userPost = async (req, res)=>{
 const getPostsByHashTag = async (req, res) =>{
     const hastTagFilter = await HashTag.findOne({hashTag:`#${req.params.hashtag}`});
     const posts = await Post.find({hashtags : hastTagFilter})
-    .populate('hashtags', 'hashTag') //preenche apenas o id e o campo hastag da referencia da outra coleção, não trazendo assim os posts vinculados a hashtag    
+    .populate('hashtags', 'hashTag') 
     .sort('-likes'); 
     return res.json(posts);
 

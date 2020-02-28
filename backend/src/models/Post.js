@@ -6,7 +6,6 @@ const PostSchema = new Schema({
     place:String,
     description: String,
     hashtags: [{type: Schema.Types.ObjectId, ref:'HashTag'}],
-    comments:[{type:Schema.Types.ObjectId, ref:'Comment'}],
     image: String,
     likes:{
         type: Number,

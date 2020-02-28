@@ -10,9 +10,7 @@ const UserSchema = new Schema({
     sit_user:{
         type:Number,
         default:0 //0 - Pendente de Ativação | 1 - Ativo | 2 - Pausado Temporariamente | 3 - Exluido Definitivamente
-    },
-    posts:[{type:Schema.Types.ObjectId, ref:'Post'}],
-    postsLikes: [{type: Schema.Types.ObjectId, ref:'UserLike'}]   
+    }  
 },
 {timestamps:true});
 

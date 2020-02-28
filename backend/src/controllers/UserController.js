@@ -1,9 +1,9 @@
 const User = require('../models/User');
 const sendEmail = require('../utils/email');
+const resizeImage = require('../utils/image');
 const bcrypt = require('bcryptjs');
-const path = require('path');
 const fs = require('fs');
-const sharp = require('sharp');
+
 
 const createUser = async (req, res)=>{
     var {user, name, bio, password, email} = req.body;
@@ -16,14 +16,9 @@ const createUser = async (req, res)=>{
         return res.status(400).send({error:'The user has a perfil in this site!'});
     }
     else{
-        //Resize the image
-        await sharp(req.file.path)
-            .resize(500)
-            .jpeg({quality:70})
-            .toFile(
-                path.resolve(req.file.destination, 'resized', perfilImage)
-            );
-        fs.unlinkSync(req.file.path);
+
+        await resizeImage(req.file.path);
+        
         password = await bcrypt.hash(password, 5);
         const newUser = await User.create({
                                             user,
@@ -77,7 +72,7 @@ const perfilUser = async (req, res)=>{
 }
 
 const editUser = async (req, res)=>{
-     var {bio, oldPassword, newPassword} = req.body;
+    var {bio, oldPassword, newPassword} = req.body;
     const {filename:perfilImage} = req.file;
     const {user} = req.params;
 
@@ -92,13 +87,8 @@ const editUser = async (req, res)=>{
         userAux.bio = bio;
         userAux.password = await bcrypt.hash(newPassword, 5);
         if(perfilImage){
-            await sharp(req.file.path)
-            .resize(500)
-            .jpeg({quality:70})
-            .toFile(
-                path.resolve(req.file.destination, 'resized', perfilImage)
-            );
-            fs.unlinkSync(req.file.path);
+            await resizeImage(req.file.path);
+
             userAux.perfilImage = perfilImage
         }
         await user.save();
