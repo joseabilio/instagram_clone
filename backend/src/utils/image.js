@@ -12,8 +12,6 @@ const resizeImage = async filePath=>{
         path.resolve(dirName, 'resized', fileName)
     );
     fs.unlinkSync(filePath);
-
-    
 }
 
 module.exports = resizeImage;

@@ -12,7 +12,6 @@ Esse projeto também contém:
 * Controle de acesso
 * Perfil de Usuário
 * Possibilidade de comentar o post
-* Compartilhar o post
 * Controle de HashTags com elas sendo transformadas em link, com ranqueamento de posts com base na quantidade de curtidas
 
 Espero pode ajudar as pessoas que estão aprendendo e poder mostrar meu conhecimento e ajudar a todos e ser ajudado também :)

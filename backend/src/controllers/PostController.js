@@ -3,8 +3,6 @@ const HashTag = require('../models/Hashtag');
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-
-
 const createPost = async (req, res)=>{
     const {author, place, description, hashtags} = req.body;
     const {filename:image} = req.file;
@@ -64,6 +62,5 @@ const getPostsByHashTag = async (req, res) =>{
     return res.json(posts);
 
 }
-
 
 module.exports = {createPost, index, userPost, getPostsByHashTag};

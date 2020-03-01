@@ -5,8 +5,7 @@ const likeCreate = async (req, res)=>{
     const {userId} = req.body;
     const {postId} = req.params;
     const post = await Post.findById(postId);
-   
-
+  
     //verificando se o usuário já deu like no post atual
     var userLike = await UserLike.findOne({post:postId, user:userId});
 
@@ -19,7 +18,6 @@ const likeCreate = async (req, res)=>{
     }
 
     return res.json(post);
-
 }
 
 module.exports = {likeCreate};
