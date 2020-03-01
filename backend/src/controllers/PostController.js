@@ -2,7 +2,7 @@ const resizeImage = require('../utils/image');
 const HashTag = require('../models/Hashtag');
 const Post = require('../models/Post');
 const User = require('../models/User');
-const Comment = require('../models/Comment');
+
 
 
 const createPost = async (req, res)=>{
@@ -35,7 +35,7 @@ const createPost = async (req, res)=>{
 
         await post.save();
     } 
-    
+    req.io.emit('post', post);
     return res.json(post);
 }
 
@@ -65,22 +65,5 @@ const getPostsByHashTag = async (req, res) =>{
 
 }
 
-const criarComentario = async (req, res)=>{
-    var {userId, text} = req.body;
-    var {postId} = req.params;
 
-    const post = await Post.findById(postId);
-    author = await User.findById(userId);
-
-
-    const newComment = await Comment.create({
-        post,
-        author,
-        text 
-    });
-    
-    return res.json(newComment);
-}
-
-
-module.exports = {createPost, index, userPost, getPostsByHashTag, criarComentario};
+module.exports = {createPost, index, userPost, getPostsByHashTag};
